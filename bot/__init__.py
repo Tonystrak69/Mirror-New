@@ -450,7 +450,7 @@ try:
     if len(GD_BUTTON) == 0:
         GD_BUTTON = None
 except KeyError:
-    GD_BUTTON = '☁️ Google Drive ☁️'
+    GD_BUTTON = '☁️ Drive Link ☁️'
 
 try:
     INDEX_BUTTON = getConfig('INDEX_BUTTON')
