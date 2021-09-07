@@ -19,3 +19,4 @@ jobs:
         env:
           HD_HEROKU_APP_NAME: ${{secrets.HEROKU_APP_NAME}}
           HD_HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
+          HD_BASE_URL_OF_BOT: ${{secrets.BASE_URL_OF_BOT}}
