@@ -39,3 +39,6 @@ youtube_dl
 bs4
 natsort
 Pillow
+qbittorrent-api
+gunicorn
+attrdict

@@ -6,6 +6,7 @@ import os
 from bot.helper.ext_utils.bot_utils import *
 from bot.helper.mirror_utils.status_utils.mega_download_status import MegaDownloadStatus
 from bot.helper.mirror_utils.upload_utils.gdriveTools import GoogleDriveHelper
+from bot import MEGA_LIMIT, STOP_DUPLICATE, TAR_UNZIP_LIMIT
 import random
 import string
 

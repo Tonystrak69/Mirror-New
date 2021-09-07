@@ -8,6 +8,7 @@ import subprocess
 import requests
 
 import aria2p
+import qbittorrentapi as qba
 import telegram.ext as tg
 from dotenv import load_dotenv
 from pyrogram import Client
@@ -45,11 +46,16 @@ if CONFIG_FILE_URL is not None:
 
 load_dotenv('config.env')
 
+alive = subprocess.Popen(["python3", "alive.py"])
+
+subprocess.run(["mkdir", "-p", "qBittorrent/config"])
+subprocess.run(["cp", "qBittorrent.conf", "qBittorrent/config/qBittorrent.conf"])
+subprocess.run(["qbittorrent-nox", "-d", "--profile=."])
+
 Interval = []
 DRIVES_NAMES = []
 DRIVES_IDS = []
 INDEX_URLS = []
-
 
 def getConfig(name: str):
     return os.environ[name]
@@ -80,6 +86,18 @@ aria2 = aria2p.API(
         secret="",
     )
 )
+
+
+def get_client() -> qba.TorrentsAPIMixIn:
+    qb_client = qba.Client(host="localhost", port=8090, username="admin", password="adminadmin")
+    try:
+        qb_client.auth_log_in()
+        #qb_client.application.set_preferences({"disk_cache":64, "incomplete_files_ext":True, "max_connec":3000, "max_connec_per_torrent":300, "async_io_threads":8, "preallocate_all":True, "upnp":True, "dl_limit":-1, "up_limit":-1, "dht":True, "pex":True, "lsd":True, "encryption":0, "queueing_enabled":True, "max_active_downloads":15, "max_active_torrents":50, "dont_count_slow_torrents":True, "bittorrent_protocol":0, "recheck_completed_torrents":True, "enable_multi_connections_from_same_ip":True, "slow_torrent_dl_rate_threshold":100,"slow_torrent_inactive_timer":600})
+        return qb_client
+    except qba.LoginFailed as e:
+        logging.error(str(e))
+        return None
+
 
 DOWNLOAD_DIR = None
 BOT_TOKEN = None
@@ -503,6 +521,13 @@ except KeyError:
     ZIP_BOT = 'zip'
 
 try:
+    REBOOT_BOT = getConfig('REBOOT_BOT')
+    if len(REBOOT_BOT) == 0:
+        REBOOT_BOT = None
+except KeyError:
+    REBOOT_BOT = 'reboot'
+
+try:
     DOWNLOAD_DIR = getConfig('DOWNLOAD_DIR')
     if len(DOWNLOAD_DIR) == 0:
         DOWNLOAD_DIR = None
@@ -524,6 +549,27 @@ try:
             raise KeyError
 except KeyError:
     pass
+
+try:
+    BASE_URL = getConfig('BASE_URL_OF_BOT')
+    if len(BASE_URL) == 0:
+        BASE_URL = None
+except KeyError:
+    logging.warning('BASE_URL_OF_BOT not provided!')
+    BASE_URL = None
+try:
+    IS_VPS = getConfig('IS_VPS')
+    IS_VPS = IS_VPS.lower() == 'true'
+except KeyError:
+    IS_VPS = False
+try:
+    SERVER_PORT = getConfig('SERVER_PORT')
+    if len(SERVER_PORT) == 0:
+        SERVER_PORT = None
+except KeyError:
+    if IS_VPS:
+        logging.warning('SERVER_PORT not provided!')
+    SERVER_PORT = None
 
 DRIVES_NAMES.append("Main")
 DRIVES_IDS.append(parent_id)

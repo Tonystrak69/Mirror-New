@@ -26,6 +26,7 @@ class MirrorStatus:
     STATUS_CLONING = "♻ ️ᴄʟᴏɴɪɴɢ"
     STATUS_WAITING = "📄 ǫᴜᴇǫᴇᴅ"
     STATUS_FAILED = "🚫 ғᴀɪʟᴇᴅ"
+    STATUS_PAUSE = "⏸️ ᴘᴀᴜsᴇᴅ"
     STATUS_ARCHIVING = "🔐 ᴀʀᴄʜɪᴠɪɴɢ"
     STATUS_EXTRACTING = "📂 ᴇxᴛʀᴀᴄᴛɪɴɢ"
 
@@ -181,11 +182,15 @@ def get_readable_message():
                         msg += f" | <b>🌱:</b> {download.aria_download().num_seeders}"
                     except:
                         pass
+                    try:
+                        msg += f"\n<b>🌍:</b> <code>{download.torrent_info().num_leechs}</code>" \
+                            f" | <b>🌱:</b> <code>{download.torrent_info().num_seeds}</code>"
+                    except:
+                        pass
                     msg += f"\n<b>⛔ Cancel:</b> <code>/{BotCommands.CancelMirror} {download.gid()}</code>"
                 msg += "\n\n"
-                if STATUS_LIMIT is not None:
-                    if INDEX >= COUNT + STATUS_LIMIT:
-                        break
+                if STATUS_LIMIT is not None and INDEX >= COUNT + STATUS_LIMIT:
+                    break
         if STATUS_LIMIT is not None:
             if INDEX > COUNT + STATUS_LIMIT:
                 return None, None
