@@ -448,7 +448,7 @@ try:
     if len(GD_BUTTON) == 0:
         GD_BUTTON = None
 except KeyError:
-    GD_BUTTON = '☁️ Google Drive ☁️'
+    GD_BUTTON = '☁️ Drive Link ☁️'
 
 try:
     INDEX_BUTTON = getConfig('INDEX_BUTTON')
@@ -511,7 +511,7 @@ try:
     if len(SEARCH_VIEW_BUTTON) == 0:
         SEARCH_VIEW_BUTTON = None
 except KeyError:
-    SEARCH_VIEW_BUTTON = '🔎'
+    SEARCH_VIEW_BUTTON = '🔎 Ur Resluts '
 
 try:
     ZIP_BOT = getConfig('ZIP_BOT')
